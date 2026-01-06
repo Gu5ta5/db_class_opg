@@ -1,62 +1,41 @@
-# OOP Database Assignment (Programmering B)
+# Bil Database System (Programmering B) – OOP & GUI
 
-## Opgave: DB + Entitet (Biler)
+Dette projekt er en komplet CRUD-applikation (Create, Read, Update, Delete) til håndtering af bil-data. Systemet er opbygget omkring objektorienterede principper, hvor en SQLite-database integreres med en grafisk brugerflade bygget i Tkinter.
 
-Denne løsning implementerer en database-klasse, der arbejder med Car-objekter i SQLite.
+## 📂 Filoversigt
 
-### Filer
+* **`car.py`**: Definerer `Car`-klassen, som fungerer som systemets entitet. Den indeholder attributter for id, mærke, model og årgang samt en `__str__`-metode til formatering.
+* **`database.py`**: Håndterer al SQL-logik og database-kommunikation. Klassen sørger for at konvertere database-rækker direkte til `Car`-objekter.
+* **`main.py`**: Applikationens kontrolcenter og brugerflade. Den indeholder al logik for at skabe vinduer, knapper og tekstfelter via `tkinter`.
 
-- **`car.py`** – Entitet-klasse `Car` med `__str__()`-metode
-- **`database.py`** – Database-klasse med CRUD-operationer, returnerer `Car`-objekter
-- **`main.py`** – Demo-script som viser alle operationer
+## 🖥️ Den Nye Grafiske Brugerflade (GUI)
 
-### Funktionalitet
+Applikationen er nu opgraderet fra et terminal-script til en fuld interaktiv GUI. 
 
-Database-klassen implementerer alle CRUD-operationer:
 
-1. **CREATE** – Opret ny bil: `db.create(brand, model, year)` → returnerer `Car`-objekt
-2. **READ** – Hent bil efter id: `db.read(car_id)` → returnerer `Car`-objekt eller `None`
-3. **READ_ALL** – Hent alle biler: `db.read_all()` → returnerer liste af `Car`-objekter
-4. **SEARCH** – Søg efter biler: `db.search(term)` → returnerer liste af `Car`-objekter
-5. **UPDATE** – Opdater bil: `db.update(car_id, car)` → returnerer `True`/`False`
-6. **DELETE** – Slet bil: `db.delete(car_id)` → returnerer `True`/`False`
 
-### Vigtige designvalg
+### Funktioner i hovedmenuen:
+* **Opret bil (CREATE)**: Åbner et pop-up vindue til indtastning af en ny bils specifikationer.
+* **Find bil (READ)**: Gør det muligt at søge efter en specifik bil baseret på dens unikke ID.
+* **Vis alle biler (READ ALL)**: Henter samtlige biler fra databasen og viser dem i det centrale tekstfelt.
+* **Opdater bil (UPDATE)**: Gør det muligt at redigere oplysningerne for en eksisterende bil via ID.
+* **Slet bil (DELETE)**: Fjerner en bil permanent fra databasen.
+* **Søg bil (SEARCH)**: Dynamisk søgning efter biler baseret på mærke eller modelnavn.
 
-- **`_run_query()`-metode** – Returnerer et dictionary med `"rows"` nøgle (som i eksemplet fra PDF'en)
-- **Objekt-konvertering** – Alle metoder der søger i database konverterer resultaterne til `Car`-objekter
-- **`sqlite3.Row`** – Aktiveret for at kunne konvertere database-rækker til dicts
-- **`__str__()`** – Defineret i `Car`-klassen for pæn udskrivning
+### Tekniske detaljer i GUI-implementeringen:
+* **Toplevel-vinduer**: Hver operation åbner i sit eget dedikerede vindue for at holde hovedmenuen ren og overskuelig.
+* **Feedback-felt**: Et `Text`-objekt i bunden af hovedvinduet fungerer som konsol, der viser resultater og bekræftelser til brugeren.
+* **Fejlhåndtering**: Programmet bruger `messagebox` til at give advarsler, hvis brugeren f.eks. indtaster tekst i et tal-felt.
 
-### Kørsel
+## 🛠️ Tekniske Designvalg
+
+* **SQLite Integration**: Databasen bruger `sqlite3.Row` factory for at kunne behandle resultater som dictionaries.
+* **Abstraktion**: Al SQL kørsel er samlet i en intern `_run_query` metode for at mindske gentagelser i koden.
+* **Automatisk nulstilling**: Ved opstart sletter `main.py` den eksisterende `cars.db` fil for at sikre et rent testmiljø (dette kan fjernes i produktionsbrug).
+
+## 🚀 Kørsel af programmet
+
+For at starte applikationen skal du køre:
 
 ```bash
 python main.py
-```
-
-### Output-eksempel
-
-```
-=== OPRETTELSE (CREATE) ===
-Oprettet: Toyota Corolla (id=1)
-Oprettet: Volvo XC90 (id=2)
-Oprettet: BMW X3 (id=3)
-
-=== VIS ALLE (READ_ALL) ===
-Bil: Toyota Corolla
-År: 2020
----
-Bil: Volvo XC90
-År: 2022
-...
-```
-
-### Testede operationer
-
-✅ CREATE – Oprettelse af biler  
-✅ READ – Hent enkelt bil  
-✅ READ_ALL – Hent alle biler  
-✅ SEARCH – Søg efter biler  
-✅ UPDATE – Opdater bil  
-✅ DELETE – Slet bil  
-✅ __str__() – Pæn udskrivning af Car-objekt
